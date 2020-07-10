@@ -10,7 +10,24 @@ def gcd_naive(a, b):
 
     return current_gcd
 
+def my_gcd(a, b):
+
+    max_ = max(a,b)
+    min_ = min(a,b)
+
+    while (max_ % min_) != 0:
+    
+        tmp = max_
+
+        max_ = min_
+
+        min_ = tmp % min_
+
+    return min_
+    
+
 if __name__ == "__main__":
-    input = sys.stdin.read()
-    a, b = map(int, input.split())
-    print(gcd_naive(a, b))
+    #input = sys.stdin.read()
+    a, b = map(int, input().split())
+    #print(gcd_naive(a, b))
+    print(my_gcd(a, b))
