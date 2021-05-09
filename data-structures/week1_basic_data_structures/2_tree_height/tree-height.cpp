@@ -24,6 +24,22 @@ public:
 };
 
 
+int Height(Node *parent) {
+  // Assume pointer is nont NULL
+
+  if (parent == NULL) {
+    std::cout << "NULL\n";
+    return 0;
+  }
+  
+  int max_height = 0;
+  for(int child_index = 0; child_index < parent->children.size(); child_index++){
+    max_height = std::max(max_height, 1 + Height(&(*parent->children[child_index])));
+  }
+
+  return  max_height;
+}
+
 int main_with_large_stack_space() {
   std::ios_base::sync_with_stdio(0);
   int n;
@@ -40,6 +56,19 @@ int main_with_large_stack_space() {
   }
 
   // Replace this code with a faster implementation
+  
+  // Find root node
+
+  int root;
+  for(int i = 0; i < n; i++) {
+    if (nodes[i].parent == NULL) {
+      root = i;
+    }
+  }
+  //std::cout << root << '\n';
+  int maxHeight = Height(&nodes[root]);
+
+  /*
   int maxHeight = 0;
   for (int leaf_index = 0; leaf_index < n; leaf_index++) {
     int height = 0;
@@ -47,8 +76,9 @@ int main_with_large_stack_space() {
       height++;
     maxHeight = std::max(maxHeight, height);
   }
+  */
     
-  std::cout << maxHeight << std::endl;
+  std::cout << maxHeight + 1 << std::endl;
   return 0;
 }
 

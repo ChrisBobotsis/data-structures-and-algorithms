@@ -1,10 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using std::vector;
 using std::cin;
 using std::cout;
+using std::pair;
+using std::make_pair;
+using std::priority_queue;
 
 class JobQueue {
  private:
@@ -13,6 +17,10 @@ class JobQueue {
 
   vector<int> assigned_workers_;
   vector<long long> start_times_;
+
+  priority_queue<pair<long long, int>> time_heap;
+  priority_queue<int> heap;
+
 
   void WriteResponse() const {
     for (int i = 0; i < jobs_.size(); ++i) {
@@ -28,7 +36,87 @@ class JobQueue {
       cin >> jobs_[i];
   }
 
+
+  void BuildHeap() {
+
+    for(int i = 0; i<num_workers_; i++) {
+
+      heap.push(-i);
+    }
+    
+  }
+
+
   void AssignJobs() {
+    // TODO: replace this code with a faster algorithm.
+    assigned_workers_.resize(jobs_.size());
+    start_times_.resize(jobs_.size());
+
+    // Build Heap
+    BuildHeap();
+
+    long long time = 0;
+
+    for(int i=0; i<jobs_.size(); i++) {
+
+      /*cout << "outer" << std::endl;
+
+      for(int j=0; j<heap.size(); j++) {
+
+        cout << heap[j] << " ";
+      }
+      cout << std::endl;
+
+      for(int j=0; j<time_heap.size(); j++) {
+          cout << time_heap[j].first << "," << time_heap[j].second << " ";
+        }
+      
+      cout << std::endl;*/
+
+      int idx = heap.top();
+
+      assigned_workers_[i] = -idx;
+      start_times_[i] = -time;
+
+      if (jobs_[i] > 0) {
+        heap.pop();
+        time_heap.push(make_pair(-(-time + jobs_[i]), idx));
+      }
+      
+      if (heap.size() == 0) {
+
+        /*cout << "inner" << std::endl;
+
+        for(int j=0; j<time_heap.size(); j++) {
+          cout << time_heap[j].first << "," << time_heap[j].second << " ";
+        }
+
+        cout << std::endl;*/
+
+        pair<long long, int> out = time_heap.top();
+        time_heap.pop();
+
+        //cout << out.first << " " << out.second << std::endl;
+
+        //cout << time_heap.size() << std::endl;
+        heap.push(out.second);
+
+        while ((time_heap.size() > 0) && (time_heap.top().first == out.first)) {
+          //cout << "inner while" << std::endl;
+          
+          pair<long long, int> tmp = time_heap.top();
+          time_heap.pop();
+          //cout << tmp.first << " " << tmp.second << std::endl;
+          //cout << time_heap.size() << std::endl;
+          heap.push(tmp.second);
+        }
+
+        time = out.first;
+      }
+    }
+  }
+
+  void AssignJobs_Naive() {
     // TODO: replace this code with a faster algorithm.
     assigned_workers_.resize(jobs_.size());
     start_times_.resize(jobs_.size());

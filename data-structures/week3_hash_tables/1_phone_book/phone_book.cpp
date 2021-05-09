@@ -1,10 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 using std::string;
 using std::vector;
 using std::cin;
+using std::unordered_map;
 
 struct Query {
     string type, name;
@@ -66,7 +68,66 @@ vector<string> process_queries(const vector<Query>& queries) {
     return result;
 }
 
+vector<string> my_process_queries(const vector<Query>& queries) {
+
+    vector<string> result;
+    // Keep list of all existing (i.e. not deleted yet) contacts.
+    unordered_map<int, string> contacts;
+    for (size_t i = 0; i < queries.size(); ++i)
+        if (queries[i].type == "add") {
+
+            contacts[queries[i].number] = queries[i].name;
+
+            /*
+            if (contacts.find(queries[i].number) == contacts.end()) {
+                // not found, thus add it
+                contacts[queries[i].number] = queries[i].name;
+
+            }
+
+            else {
+                // nothing
+            }
+            */
+
+        } 
+        
+        else if (queries[i].type == "del") {
+            
+            unordered_map<int, string>::iterator it = contacts.find(queries[i].number);
+
+            if (it == contacts.end()) {
+
+                // do nothing
+            }
+
+            else {
+
+                contacts.erase(it);
+            }
+        } 
+        
+        else {
+
+            // "find"
+            
+            unordered_map<int, string>::iterator it = contacts.find(queries[i].number);
+
+            if (it != contacts.end()) {
+
+                result.push_back(contacts[queries[i].number]);
+            }
+
+            else {
+
+                result.push_back("not found");
+            }
+
+        }
+    return result;
+}
+
 int main() {
-    write_responses(process_queries(read_queries()));
+    write_responses(my_process_queries(read_queries()));
     return 0;
 }

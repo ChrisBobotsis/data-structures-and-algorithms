@@ -38,13 +38,69 @@ class HeapBuilder {
     // but in the worst case gives a quadratic number of swaps.
     //
     // TODO: replace by a more efficient implementation
-    for (int i = 0; i < data_.size(); ++i)
+    /*for (int i = 0; i < data_.size(); ++i)
       for (int j = i + 1; j < data_.size(); ++j) {
         if (data_[i] > data_[j]) {
           swap(data_[i], data_[j]);
           swaps_.push_back(make_pair(i, j));
         }
-      }
+      }*/
+    int n = data_.size();
+
+    if (n % 2 != 0) {
+      n = n/2 + 1;
+    }
+
+    else {
+      n = n/2;
+    }
+
+    for(int i=n; i>=0; i--) {
+
+      SiftDown(i);
+    }
+
+    /*for(int i=0; i<5; i++) {
+
+      cout << data_[i] << " ";
+    }*/
+    
+  }
+
+  void SiftDown(int i) {
+    // We are now sifting down higher values since
+    // this is a min-heap
+
+    int n = data_.size();
+
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+
+    int index = i;
+
+    if ((l < n) && (data_[index] > data_[l])) {
+      // 
+      index = l;
+    }
+
+    if ((r < n) && (data_[index] > data_[r])) {
+      // 
+      index = r;
+    }
+
+    if (index != i) {
+
+      int tmp = data_[i];
+
+      data_[i] = data_[index];
+
+      data_[index] = tmp;
+
+      swaps_.push_back(make_pair(i, index));
+
+      SiftDown(index);
+    }
+
   }
 
  public:
@@ -57,7 +113,7 @@ class HeapBuilder {
 
 int main() {
   std::ios_base::sync_with_stdio(false);
-  HeapBuilder heap_builder;
+  HeapBuilder heap_builder; 
   heap_builder.Solve();
   return 0;
 }

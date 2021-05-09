@@ -30,5 +30,4 @@ if __name__ == '__main__':
     input = sys.stdin.read()
     n, *a = list(map(int, input.split()))
     b = n * [0]
-    import pdb; pdb.set_trace()
     print(get_number_of_inversions(a, b, 0, len(a)))

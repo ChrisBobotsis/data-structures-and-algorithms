@@ -27,13 +27,74 @@ public:
     }
   }
 
+  void inOrderTraversal(int node, vector<int>& result) {
+
+    int l = left[node];
+    int r = right[node];
+
+    if (l == -1) {
+      // Do nothing
+    }
+
+    else {
+
+      inOrderTraversal(l, result);
+    }
+
+    result.push_back(key[node]);
+
+    if (r == -1) {
+      // Do nothing
+    }
+
+    else {
+
+      inOrderTraversal(r, result);
+    }
+
+    return;
+  }
 
   vector <int> in_order() {
     vector<int> result;
     // Finish the implementation
     // You may need to add a new recursive method to do that
 
+    if (key.empty()) {
+      return result;
+    }
+
+    inOrderTraversal(0, result);
+
     return result;
+  }
+
+   void preOrderTraversal(int node, vector<int>& result) {
+
+    int l = left[node];
+    int r = right[node];
+
+    result.push_back(key[node]);
+
+    if (l == -1) {
+      // Do nothing
+    }
+
+    else {
+
+      preOrderTraversal(l, result);
+    }
+
+    if (r == -1) {
+      // Do nothing
+    }
+
+    else {
+
+      preOrderTraversal(r, result);
+    }
+
+    return;
   }
 
   vector <int> pre_order() {
@@ -41,7 +102,41 @@ public:
     // Finish the implementation
     // You may need to add a new recursive method to do that
     
+    if (key.empty()) {
+      return result;
+    }
+
+    preOrderTraversal(0, result);
+
     return result;
+  }
+
+  void postOrderTraversal(int node, vector<int>& result) {
+
+    int l = left[node];
+    int r = right[node];
+
+    if (l == -1) {
+      // Do nothing
+    }
+
+    else {
+
+      postOrderTraversal(l, result);
+    }
+
+    if (r == -1) {
+      // Do nothing
+    }
+
+    else {
+
+      postOrderTraversal(r, result);
+    }
+
+    result.push_back(key[node]);
+
+    return;
   }
 
   vector <int> post_order() {
@@ -49,6 +144,12 @@ public:
     // Finish the implementation
     // You may need to add a new recursive method to do that
     
+    if (key.empty()) {
+      return result;
+    }
+
+    postOrderTraversal(0, result);
+
     return result;
   }
 };
